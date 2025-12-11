@@ -23,7 +23,7 @@ Apache Kafka es una plataforma de **streaming de datos distribuida** que permite
 ## 🏗️ Estructura del Proyecto
 
 ```
-kafka-presentacion/
+kafka-basic/
 ├── docker-compose.yml          # Configuración de Kafka, Zookeeper y UI
 ├── Makefile                    # Comandos útiles para gestionar el proyecto
 ├── requirements.txt            # Dependencias Python
@@ -33,6 +33,17 @@ kafka-presentacion/
 │
 ├── producer_avanzado.py        # 🚀 Productor con características avanzadas
 ├── consumer_avanzado.py        # 🎯 Consumidor con control manual y métricas
+│
+├── advanced-example/           # 🏢 Sistema completo de e-commerce
+│   ├── services/               #    Microservicios (order, inventory, notification, analytics)
+│   ├── config/                 #    Configuración de topics
+│   ├── schemas/                #    Definición de eventos
+│   ├── scripts/                #    Scripts de utilidad
+│   ├── docker-compose.yml      #    Orquestación de servicios
+│   ├── Makefile                #    Comandos para el ejemplo avanzado
+│   ├── README.md               #    Documentación completa del ejemplo
+│   ├── ARCHITECTURE.md         #    Arquitectura y patrones detallados
+│   └── QUICKSTART.md           #    Guía de inicio rápido
 │
 └── README.md                   # Esta guía
 ```
@@ -651,12 +662,35 @@ Este proyecto es de código abierto y está disponible para fines educativos.
 
 ---
 
+## 🚀 Ejemplo Avanzado: Sistema E-Commerce
+
+Una vez que domines los conceptos básicos, explora nuestro **ejemplo avanzado completo** que implementa un sistema realista de e-commerce con microservicios:
+
+```bash
+cd advanced-example
+make demo
+```
+
+**Características del ejemplo avanzado:**
+- 4 microservicios (Order, Inventory, Notification, Analytics)
+- Patrones avanzados: Event Sourcing, Saga Pattern, CQRS
+- Transacciones Kafka y garantías exactly-once
+- Dead Letter Queue (DLQ) para manejo de fallos
+- Stream processing con ventanas temporales
+- Docker Compose completo con Kafka UI
+- Documentación detallada y guía de arquitectura
+
+**Documentación completa:** [`advanced-example/README.md`](./advanced-example/README.md)
+
+---
+
 ## 🎉 ¡Felicidades!
 
 Has completado la configuración del curso de Kafka. Ahora estás listo para:
 - Enviar tus primeros mensajes
 - Crear consumidores que procesen datos en tiempo real
 - Construir aplicaciones distribuidas y escalables
+- Explorar el ejemplo avanzado de microservicios
 
 **¡Buena suerte en tu viaje con Apache Kafka!** 🚀
 

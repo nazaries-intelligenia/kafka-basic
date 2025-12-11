@@ -21,7 +21,11 @@ install: ## Instala las dependencias de Python
 	pip install -r requirements.txt
 	@echo "$(GREEN)✓ Dependencias instaladas correctamente$(NC)"
 
-start: ## Inicia todos los contenedores de Kafka
+start: ## Inicia todos los contenedores de Kafka e instala dependencias
+	@echo "$(BLUE)📦 Instalando dependencias de Python...$(NC)"
+	@pip install -r requirements.txt > /dev/null 2>&1 || (echo "$(YELLOW)⚠️  Error instalando dependencias, intenta ejecutar: make install$(NC)"; exit 1)
+	@echo "$(GREEN)✓ Dependencias instaladas$(NC)"
+	@echo ""
 	@echo "$(BLUE)🚀 Iniciando Kafka...$(NC)"
 	docker compose up -d
 	@echo "$(GREEN)✓ Kafka iniciado correctamente$(NC)"

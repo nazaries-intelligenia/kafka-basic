@@ -3,7 +3,11 @@
     "allow": [
       "Bash(python3:*)",
       "Bash(make down:*)",
-      "Bash(make start:*)"
+      "Bash(make start:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

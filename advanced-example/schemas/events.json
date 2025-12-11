@@ -1,0 +1,98 @@
+{
+  "order_created_event": {
+    "event_type": "ORDER_CREATED",
+    "order_id": "string (uuid)",
+    "timestamp": "string (ISO 8601)",
+    "data": {
+      "order_id": "string",
+      "customer_id": "string",
+      "items": [
+        {
+          "product_id": "string",
+          "quantity": "integer",
+          "price": "float"
+        }
+      ],
+      "status": "string (PENDING)",
+      "total": "float",
+      "created_at": "string (ISO 8601)",
+      "updated_at": "string (ISO 8601)"
+    }
+  },
+  "order_confirmed_event": {
+    "event_type": "ORDER_CONFIRMED",
+    "order_id": "string (uuid)",
+    "timestamp": "string (ISO 8601)",
+    "data": {
+      "order_id": "string",
+      "customer_id": "string",
+      "status": "string (CONFIRMED)",
+      "total": "float",
+      "updated_at": "string (ISO 8601)"
+    }
+  },
+  "order_cancelled_event": {
+    "event_type": "ORDER_CANCELLED",
+    "order_id": "string (uuid)",
+    "timestamp": "string (ISO 8601)",
+    "reason": "string",
+    "data": {
+      "order_id": "string",
+      "customer_id": "string",
+      "status": "string (CANCELLED)",
+      "cancellation_reason": "string",
+      "updated_at": "string (ISO 8601)"
+    }
+  },
+  "inventory_request": {
+    "request_id": "string (uuid)",
+    "order_id": "string",
+    "items": [
+      {
+        "product_id": "string",
+        "quantity": "integer"
+      }
+    ],
+    "action": "string (RESERVE|COMMIT|ROLLBACK)",
+    "timestamp": "string (ISO 8601)"
+  },
+  "inventory_response": {
+    "order_id": "string",
+    "request_id": "string",
+    "status": "string (RESERVED|INSUFFICIENT_STOCK|COMMITTED|ROLLED_BACK)",
+    "items": [
+      {
+        "product_id": "string",
+        "quantity": "integer",
+        "reserved_at": "string (ISO 8601)"
+      }
+    ],
+    "insufficient_items": [
+      {
+        "product_id": "string",
+        "requested": "integer",
+        "available": "integer",
+        "reason": "string"
+      }
+    ],
+    "timestamp": "string (ISO 8601)"
+  },
+  "notification_request": {
+    "notification_id": "string (uuid)",
+    "order_id": "string",
+    "customer_id": "string",
+    "type": "string (ORDER_CONFIRMED|ORDER_CANCELLED)",
+    "message": "string",
+    "channel": "string (email|sms|push)",
+    "timestamp": "string (ISO 8601)"
+  },
+  "notification_event": {
+    "event_type": "string (NOTIFICATION_SENT|NOTIFICATION_FAILED)",
+    "notification_id": "string",
+    "order_id": "string",
+    "customer_id": "string",
+    "channel": "string",
+    "type": "string",
+    "timestamp": "string (ISO 8601)"
+  }
+}
