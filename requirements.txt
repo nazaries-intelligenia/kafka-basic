@@ -1,0 +1,7 @@
+# Cliente de Kafka para Python
+# Esta es la librería principal que usaremos para producir y consumir mensajes
+kafka-python==2.0.2
+
+# Librería para formatear la salida con colores en la terminal
+# Hace que los mensajes sean más legibles y atractivos
+colorama==0.4.6

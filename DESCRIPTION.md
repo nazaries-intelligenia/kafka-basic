@@ -1,0 +1,1 @@
+Curso básico de Apache Kafka con Python. Incluye ejemplos prácticos (productores y consumidores básicos/avanzados), Docker Compose con Kafka + Zookeeper + Kafka UI, Makefile con +20 comandos útiles, código muy comentado en español y guía paso a paso. Aprende topics, partitions, offsets, consumer groups y más. Listo en 5 minutos. Ideal para estudiantes y desarrolladores.
