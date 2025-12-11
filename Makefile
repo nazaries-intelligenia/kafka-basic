@@ -1,4 +1,4 @@
-.PHONY: help start stop restart logs status clean install producer consumer ui test-producer test-consumer
+.PHONY: help start stop down restart restart-full logs status clean install producer consumer ui test-producer test-consumer
 
 # Colores para los mensajes
 GREEN  := \033[0;32m
@@ -32,15 +32,35 @@ start: ## Inicia todos los contenedores de Kafka
 	@echo ""
 	@echo "$(BLUE)📊 Kafka UI disponible en: http://localhost:8080$(NC)"
 
-stop: ## Detiene todos los contenedores
+stop: ## Detiene todos los contenedores sin eliminar volúmenes
 	@echo "$(YELLOW)🛑 Deteniendo Kafka...$(NC)"
-	docker compose down
+	docker compose stop
 	@echo "$(GREEN)✓ Kafka detenido$(NC)"
 
-restart: ## Reinicia todos los contenedores
+down: ## Detiene y elimina todos los contenedores (mantiene volúmenes)
+	@echo "$(YELLOW)🛑 Deteniendo y eliminando contenedores Kafka...$(NC)"
+	docker compose down --remove-orphans || true
+	@echo "$(YELLOW)  Limpiando contenedores residuales...$(NC)"
+	@docker rm -f zookeeper kafka kafka-ui 2>/dev/null || true
+	@echo "$(GREEN)✓ Contenedores eliminados$(NC)"
+
+restart: ## Reinicia todos los contenedores sin reconstruir
 	@echo "$(YELLOW)🔄 Reiniciando Kafka...$(NC)"
 	docker compose restart
 	@echo "$(GREEN)✓ Kafka reiniciado$(NC)"
+
+restart-full: ## Detiene, elimina y reinicia todos los contenedores desde cero
+	@echo "$(YELLOW)🔄 Reinicio completo de Kafka...$(NC)"
+	@echo "$(YELLOW)  1. Deteniendo contenedores...$(NC)"
+	docker compose down --remove-orphans || true
+	@docker rm -f zookeeper kafka kafka-ui 2>/dev/null || true
+	@echo "$(YELLOW)  2. Iniciando desde cero...$(NC)"
+	docker compose up -d
+	@echo "$(YELLOW)  3. Esperando a que Kafka esté listo...$(NC)"
+	@sleep 10
+	@echo "$(GREEN)✓ Kafka reiniciado completamente y listo$(NC)"
+	@echo ""
+	@echo "$(BLUE)📊 Kafka UI disponible en: http://localhost:8080$(NC)"
 
 logs: ## Muestra los logs de todos los contenedores
 	docker compose logs -f

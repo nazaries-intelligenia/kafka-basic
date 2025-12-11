@@ -265,11 +265,13 @@ Este comando:
 | `make help` | Muestra todos los comandos disponibles |
 | `make install` | Instala las dependencias Python |
 | `make start` | Inicia Kafka, Zookeeper y Kafka UI |
-| `make stop` | Detiene todos los contenedores |
-| `make restart` | Reinicia todos los contenedores |
+| `make stop` | Detiene todos los contenedores (sin eliminarlos) |
+| `make down` | Detiene y elimina contenedores (mantiene datos en volúmenes) |
+| `make restart` | Reinicia rápidamente los contenedores existentes |
+| `make restart-full` | Reinicio completo: detiene, elimina y reinicia desde cero |
 | `make status` | Muestra el estado de los contenedores |
 | `make logs` | Muestra los logs de todos los servicios |
-| `make clean` | Detiene y elimina todo (¡cuidado, borra datos!) |
+| `make clean` | Detiene y elimina todo incluyendo volúmenes (¡cuidado, borra datos!) |
 
 ### Comandos de Producción/Consumo
 
@@ -378,6 +380,101 @@ python3 consumer_avanzado.py
 
 Observa cómo los mensajes del mismo sensor siempre van a la misma partición.
 
+## 🔧 Gestión de Servicios
+
+### Cuándo usar cada comando
+
+#### `make stop` - Pausa temporal
+Usa este comando cuando:
+- Quieres liberar recursos temporalmente
+- Vas a volver a trabajar pronto
+- No quieres perder el estado actual
+
+```bash
+make stop
+# Los contenedores se detienen pero no se eliminan
+# Para reanudar: make start
+```
+
+#### `make down` - Limpieza de contenedores
+Usa este comando cuando:
+- Has terminado de trabajar por hoy
+- Quieres limpiar contenedores pero mantener los datos
+- Necesitas liberar puertos para otros proyectos
+
+```bash
+make down
+# Elimina contenedores pero mantiene los volúmenes con datos
+# Para reiniciar: make start
+```
+
+#### `make restart` - Reinicio rápido
+Usa este comando cuando:
+- Kafka está lento o no responde
+- Has cambiado alguna configuración menor
+- Quieres aplicar cambios sin perder datos
+
+```bash
+make restart
+# Reinicia rápidamente sin reconstruir
+```
+
+#### `make restart-full` - Reinicio completo
+Usa este comando cuando:
+- Has actualizado docker-compose.yml
+- Kafka está en un estado corrupto
+- Quieres asegurarte de empezar limpio (manteniendo datos)
+
+```bash
+make restart-full
+# Equivalente a: make down && make start
+# Reconstruye todo desde cero pero mantiene los volúmenes
+```
+
+#### `make clean` - Borrado completo
+⚠️ **CUIDADO**: Este comando elimina TODOS los datos
+
+Usa este comando cuando:
+- Quieres empezar completamente desde cero
+- Tienes problemas graves de corrupción
+- Estás haciendo pruebas y quieres resetear todo
+
+```bash
+make clean
+# Elimina contenedores Y volúmenes (pierdes todos los mensajes)
+# Para reiniciar limpio: make start
+```
+
+### Flujo de trabajo típico
+
+**Inicio del día:**
+```bash
+make start          # Inicia todo
+make status         # Verifica que todo esté corriendo
+```
+
+**Durante el desarrollo:**
+```bash
+make logs           # Revisa logs si algo falla
+make restart        # Reinicia si Kafka se pone lento
+make list-topics    # Ve qué topics tienes
+```
+
+**Fin del día:**
+```bash
+make down           # Detiene y limpia contenedores (mantiene datos)
+# o
+make stop           # Solo detiene (más rápido al día siguiente)
+```
+
+**Si algo va mal:**
+```bash
+make logs           # Primero revisa qué pasó
+make restart-full   # Reinicio completo si es necesario
+# o en casos extremos:
+make clean && make start  # Borra todo y empieza desde cero
+```
+
 ## 🐛 Resolución de Problemas
 
 ### Problema: "No se pudo conectar a Kafka"
@@ -406,8 +503,12 @@ make logs
 # Verifica que Docker esté corriendo
 docker ps
 
-# Reinicia Kafka
-make restart
+# Reinicia Kafka completamente
+make restart-full
+
+# O si el problema persiste, reinicia desde cero
+make clean
+make start
 ```
 
 ### Problema: Los consumidores no ven mensajes antiguos
